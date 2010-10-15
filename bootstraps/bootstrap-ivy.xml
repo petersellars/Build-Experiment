@@ -1,0 +1,39 @@
+<!--
+ 
+   This build file is a bootstrap project intended to download and install 
+   ivy ready for use in resolving dependencies
+        
+-->
+<project name="bootstrap-ivy" default="bootstrap-ivy" basedir=".">
+
+	<!-- 
+	  These default values used if no properties file is present 
+	-->
+	<property name="ivy.install.version" value="2.2.0" />
+	<property name="ivy.jar.dir" value="${basedir}/../ivy" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+
+	<available file="${ivy.jar.file}" 
+		         property="ivy.installed" />
+
+	<target name="bootstrap-ivy" 
+		      description="Bootstrap Ivy" 
+		      unless="ivy.installed">
+		<mkdir dir="${ivy.jar.dir}"/>
+    <echo>Bootstrapping Ivy into ${ivy.jar.dir}</echo>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" 
+			   dest="${ivy.jar.file}" usetimestamp="true"/>
+	</target>
+	
+	<target name="install-ivy" 
+	        description="Install Ivy"
+	        depends="bootstrap-ivy">
+    <path id="ivy.lib.path">
+		  <fileset dir="${ivy.jar.dir}" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" 
+			       uri="antlib:org.apache.ivy.ant" 
+			       classpathref="ivy.lib.path"/>
+	</target>
+	
+</project>

@@ -1,4 +1,4 @@
-<project name="build-experiment" default="resolve" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="build-experiment" default="" xmlns:ivy="antlib:org.apache.ivy.ant">
 
 	<property file="build.properties" />
 
@@ -11,10 +11,5 @@
 	  Bootstrapping 
 	-->
 	<ant antfile="${bootstraps.dir}/bootstrap-ivy.xml" />
-	
-	<target name="resolve"
-		      description="Retrieve dependencies with Ivy">
-    <ivy:retrieve/>
-	</target>
 	
 </project>

@@ -1,4 +1,4 @@
-<project name="build-experiment" default="" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="build-experiment" default="">
 
 	<property file="build.properties" />
 
@@ -10,6 +10,68 @@
 	<!-- 
 	  Bootstrapping 
 	-->
-	<ant antfile="${bootstraps.dir}/bootstrap-ivy.xml" />
+	<ant antfile="${bootstraps.dir}/bootstrap-ivy.xml"/>
+	
+	<!-- TEMP -->
+	
+	<property name="src.dir"         location="src/java"/>
+	<property name="test.src.dir"    location="src/test"/>
+	<property name="output.dir"      location="target/classes"/>
+	<property name="test.output.dir" location="target/test-classes"/>
+	
+  <property name="lib.dir"         location="lib"/>
+  <property name="report.dir"      location="target/surefire-reports"/>
+	
+  <path id="lib.classpath">
+    <fileset dir="${lib.dir}">
+        <include name="junit-4.8.2.jar"/>
+        <include name="openpojo-0.2.0.jar"/>
+    </fileset>
+  </path>
+	
+	<path id="test.classpath">
+		  <path refid="lib.classpath"/>
+		  <pathelement location="${output.dir}"/>
+		  <pathelement location="${test.output.dir}"/>
+	</path>
+	
+	<target name="init">
+	    <mkdir dir="${output.dir}"/>
+		  <mkdir dir="${test.output.dir}"/>
+	</target>
+	
+	<target name="compile" depends="init">
+	   <javac includeantruntime="false"
+	   	    source="1.5" target="1.5"
+	   	    srcdir="${src.dir}"
+	        destdir="${output.dir}">
+	       <classpath refid="lib.classpath"/>
+	   </javac>
+	</target>
+	
+	<target name="compile-tests" depends="compile">
+     <javac includeantruntime="false" 
+     	    source="1.5" target="1.5"
+          srcdir="${test.src.dir}"
+          destdir="${test.output.dir}">
+         <classpath refid="lib.classpath"/>
+     </javac>
+	</target>
+	
+	<target name="run-tests" depends="compile-tests">
+	   <junit printsummary="false" fork="true">
+          <classpath refid="test.classpath"/>
+	   	    <formatter type="plain" usefile="false"/>
+	   	    <test name="net.catosplace.pojo.test.WhenTestingPojoClasses"
+	   	          todir="${report.dir}">
+	   	    	<formatter type="xml"/>
+	   	    </test>
+		 </junit>
+	</target>
+	
+  <target name="clean">
+      <delete dir="${output.dir}"/>
+  	  <delete dir="${test.output.dir}"/>
+  </target>
 	
 </project>

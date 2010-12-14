@@ -38,6 +38,7 @@
 	<target name="init">
 	    <mkdir dir="${output.dir}"/>
 		  <mkdir dir="${test.output.dir}"/>
+		  <mkdir dir="${report.dir}"/>
 	</target>
 	
 	<target name="compile" depends="init">
@@ -72,6 +73,7 @@
   <target name="clean">
       <delete dir="${output.dir}"/>
   	  <delete dir="${test.output.dir}"/>
+  	  <delete dir="${report.dir}"/>
   </target>
 	
 </project>
